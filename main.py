@@ -116,7 +116,7 @@ async def main_loop():
                             #await asyncio.sleep(5)
                             
                             # ✅ 모터 작동
-                            send_done_device()
+                            await send_done_device()
                             #await run_motor(duration=10, power=0.75)
 
                             # ✅ 로봇팔 초기화

@@ -20,7 +20,7 @@ async def run_motor(duration=5, power=0.8):
     print("💧 수분 펌프 정지 완료")
 
 # ───── WebSocket 핸들러 ─────
-async def handler(websocket, path):
+async def handler(websocket):
     async for message in websocket:
         print(f"📨 수신 메시지: {message}")
 
