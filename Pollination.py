@@ -27,7 +27,7 @@ async def handler(websocket):
         if message == "DONE":
             response = "🟢 작업 완료 확인 및 모터 실행"
             await websocket.send(response)
-            await run_motor(duration=5, power=0.75)
+            await run_motor(duration=10, power=0.75)
         else:
             response = f"⚠️ 알 수 없는 메시지: {message}"
             await websocket.send(response)
