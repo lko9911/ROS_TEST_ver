@@ -132,5 +132,5 @@ if __name__ == "__main__":
     print_detected_objects_test(detected_objects)
 
     print("\n🔄 좌표 변환 후:")
-    transformed_objects = transform_coordinates60("detected_objects.json", tx=0.2, ty=0.1, tz=0.0)
+    transformed_objects = transform_coordinates60("detected_test.json", tx=0.3, ty=0.0, tz=0.0)
     print_detected_objects_test({"detected_objects": transformed_objects})

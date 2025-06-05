@@ -26,12 +26,12 @@ JOINT_SEQUENCE = [
 ]
 
 NODE_SPEED_PARAMS = {
-    0: {'vel': 6.0, 'accel': 4.0, 'decel': 4.0},
-    1: {'vel': 6.0, 'accel': 4.0, 'decel': 4.0},
-    2: {'vel': 6.0, 'accel': 5.0, 'decel': 5.0},
-    3: {'vel': 2.0, 'accel': 1.5, 'decel': 1.5},
-    4: {'vel': 2.0, 'accel': 1.5, 'decel': 1.5},
-    5: {'vel': 2.0, 'accel': 1.5, 'decel': 1.5},
+    0: {'vel': 9.0, 'accel': 8.0, 'decel': 8.0},
+    1: {'vel': 9.0, 'accel': 8.0, 'decel': 8.0},
+    2: {'vel': 8.5, 'accel': 7.0, 'decel': 7.0},
+    3: {'vel': 3.0, 'accel': 2.5, 'decel': 2.5},
+    4: {'vel': 6.0, 'accel': 5.5, 'decel': 5.5},
+    5: {'vel': 6.0, 'accel': 5.5, 'decel': 5.5},
 }
 
 MIN_VEL = 1.0
@@ -116,12 +116,14 @@ def wait_until_reached(bus, node_id, target_pos, tolerance=1, max_retry=300):
     print(f"[경고] Node {node_id} 목표 도달 실패")
     return False
 
+'''
 def initialize_nodes(bus, node_ids):
     for node_id in node_ids:
         send_position_control_mode(bus, node_id)
         time.sleep(0.05)
         send_closed_loop_state(bus, node_id)
         print(f"[초기화] Node {node_id} 완료")
+'''
 
 def calculate_normalized_speeds(bus, joint_angles):
     target_positions = {}

@@ -2,7 +2,7 @@ from ggul_bot.Strawberry_Vision import detect_and_save,test_mode, test_mode2
 from ggul_bot.Coordinate_Transformations import load_detected_objects_test, print_detected_objects_test, transform_coordinates60
 #from ggul_bot.Classify_Disease import detect_and_show
 from ggul_bot.Raspberry_Websocket import send_detected_objects, start_joint_state_server, send_done_device
-#from ggul_bot.Robot_Operation import process_joint_set, initialize_nodes
+#from ggul_bot.Robot_Operation import process_joint_set #, initialize_nodes
 #from ggul_bot.Pollination import run_motor
 import asyncio
 import json
@@ -24,7 +24,7 @@ async def main_loop():
         sys.exit(1)
     '''
     
-    yolo_path = "model/yolov10x.pt"
+    yolo_path = "model/sta4.pt"
     npz_path = "stereo_calibration_result_test.npz"
     keras_path = "model/best_model.keras"
     json_path = "detected_objects.json"
@@ -43,15 +43,15 @@ async def main_loop():
 
 
             print(f"\n========== [{i}번째 주기 시작] ==========")
-            #initialize_nodes(bus, [0, 1, 2, 3, 4, 5])
+            ##initialize_nodes(bus, [0, 1, 2, 3, 4, 5])
             #process_joint_set(bus,[-3.142, 0.873, -2.094, -1.222, -1.5708, 0])
 
             await asyncio.sleep(5)
 
             #-----------------1. Strawberry-Vision 실행부------------------#
             print(f"[{i}] YOLO 탐지 및 3D 위치 추정 중...")
-            #detect_and_save(model_path=yolo_path, npz_path=npz_path, save_path=json_path, time_interval=10000)
-            test_mode2()
+            detect_and_save(model_path=yolo_path, npz_path=npz_path, save_path=json_path, time_interval=10000)
+            #test_mode2()
 
             #-----------------2. 좌표 변환------------------#
             transform_coordinates60(json_path)
@@ -104,6 +104,12 @@ async def main_loop():
             log_file_path = "joint_states_log.json"
             with open(log_file_path, 'r') as f:
                 for line_num, line in enumerate(f, 1):
+                    
+                    '''
+                    if line_num > 3:
+                        break # 3줄까지만 읽고 종료
+                    '''
+
                     try:
                         data = json.loads(line)
                         joint_values = data.get("joint_values")
@@ -111,9 +117,9 @@ async def main_loop():
                             print(f"[INFO] Line {line_num}: Sending joint values {joint_values}")
                             
                             # ✅ 로봇팔 작동
-                            #initialize_nodes(bus, [0, 1, 2, 3, 4, 5])
+                            ##initialize_nodes(bus, [0, 1, 2, 3, 4, 5])
                             #process_joint_set(bus,joint_values)
-                            #await asyncio.sleep(5)
+                            await asyncio.sleep(5)
                             
                             # ✅ 모터 작동
                             await send_done_device()
@@ -121,10 +127,9 @@ async def main_loop():
                             #await run_motor(duration=10, power=0.75)
 
                             # ✅ 로봇팔 초기화
-                            #initialize_nodes(bus, [0, 1, 2, 3, 4, 5])
+                            ##initialize_nodes(bus, [0, 1, 2, 3, 4, 5])
                             #process_joint_set(bus, [-3.142, 0.873, -2.094, -1.222, -1.5708, 0])
-
-                            #await asyncio.sleep(3)
+                            #await asyncio.sleep(5)
                             ## await asyncio.sleep(10)  필요시 중간에 넣을 것 
                             
                         else:

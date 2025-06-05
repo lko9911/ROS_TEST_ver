@@ -9,8 +9,8 @@ from functools import partial
 8767 : 로봇팔 동작 완료 포트
 '''
 
-raspberrypi_uri_detect = "ws://192.168.219.78:8765"
-raspberrypi_uri_done = "ws://192.168.219.78:8767"    
+raspberrypi_uri_detect = "ws://192.168.33.77:8765"
+raspberrypi_uri_done = "ws://192.168.33.77:8767"    
 
 # ───── JSON 로드 함수 ─────
 def load_detected_objects(file_path="detected_objects.json"):

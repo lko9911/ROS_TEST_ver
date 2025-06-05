@@ -104,10 +104,18 @@ def transform_coordinates60(
     transformed = []
     for obj in data["detected_objects"]:
         # 픽셀 → 미터 단위로 변환
+        '''
+        # 1. 60cm 일때 (100픽셀을 0.1m로 반환)
         x = (obj["X"] - 472) / 1000
         y = -(obj["Y"] - 406) / 1000
-        z = 0.5  # 고정된 깊이값
+        z = (obj["Z"]) / 100
+        '''
 
+        # 2. 45cm 일때 (134픽셀을 0.1m로 반환)
+        x = (obj["X"] - 472) / 1340
+        y = -(obj["Y"] - 406) / 1340
+        z = (obj["Z"]) / 100
+        
         P_cam = np.array([x, y, z])
         P_base = R @ P_cam + T
 

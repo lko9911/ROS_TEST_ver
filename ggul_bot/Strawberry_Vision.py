@@ -133,7 +133,7 @@ def detect_and_save(model_path="model/best3.pt", npz_path="stereo_calibration_re
                 # Z 값 초기화 (기본 값 설정)
                 X = center_x
                 Y = center_y
-                Z = 60.00 
+                Z = 45.00 
                 
                 '''
                 # 스테레오 3D
