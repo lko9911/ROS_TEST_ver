@@ -11,6 +11,7 @@ from functools import partial
 
 raspberrypi_uri_detect = "ws://192.168.33.77:8765"
 raspberrypi_uri_done = "ws://192.168.33.77:8767"    
+raspberrypi_uri_done2 = "ws://192.168.33.77:8768"
 
 # ───── JSON 로드 함수 ─────
 def load_detected_objects(file_path="detected_objects.json"):
@@ -51,6 +52,17 @@ async def send_done_device():
         response = await websocket.recv()   # 응답 받기
         print(f"✅ 서버 응답: {response}")
 
+# ───── 클라이언트: 이동 통신 ─────
+async def send_done_move():
+    uri = raspberrypi_uri_done2 # 서버 URI (이동 8768번)
+
+    await asyncio.sleep(1)  # 서버 연결 준비 시간 확보
+
+    async with websockets.connect(uri) as websocket:
+        done_message = "DONE"
+        await websocket.send(done_message)  # 문자열로 완료 전송
+        response = await websocket.recv()   # 응답 받기
+        print(f"✅ 서버 응답: {response}")
 
 # ───── 서버: 조인트 상태 수신 ─────
 async def receive_joint_states(websocket,queue):

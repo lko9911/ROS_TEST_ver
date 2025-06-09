@@ -1,9 +1,8 @@
 from ggul_bot.Strawberry_Vision import detect_and_save,test_mode, test_mode2
 from ggul_bot.Coordinate_Transformations import load_detected_objects_test, print_detected_objects_test, transform_coordinates60
 #from ggul_bot.Classify_Disease import detect_and_show
-from ggul_bot.Raspberry_Websocket import send_detected_objects, start_joint_state_server, send_done_device
-#from ggul_bot.Robot_Operation import process_joint_set #, initialize_nodes
-#from ggul_bot.Pollination import run_motor
+from ggul_bot.Raspberry_Websocket import send_detected_objects, start_joint_state_server, send_done_device, send_done_move
+from ggul_bot.Robot_Operation import process_joint_set 
 import asyncio
 import json
 import time
@@ -11,18 +10,19 @@ import can
 import os
 import sys
 
-#CHANNEL = 'COM3'
-#BITRATE = 250000
+
+CHANNEL = 'COM3'
+BITRATE = 250000
 
 async def main_loop():
-    '''
+    
     try:
         bus = can.interface.Bus(interface='slcan', channel=CHANNEL, bitrate=BITRATE)
         print("[INFO] CAN 버스 연결 성공")
     except Exception as e:
         print(f"[ERROR] CAN 버스 초기화 실패: {e}")
         sys.exit(1)
-    '''
+    
     
     yolo_path = "model/sta4.pt"
     npz_path = "stereo_calibration_result_test.npz"
@@ -43,14 +43,13 @@ async def main_loop():
 
 
             print(f"\n========== [{i}번째 주기 시작] ==========")
-            ##initialize_nodes(bus, [0, 1, 2, 3, 4, 5])
-            #process_joint_set(bus,[-3.142, 0.873, -2.094, -1.222, -1.5708, 0])
+            process_joint_set(bus,[-3.142, 0.873, -2.094, -1.222, -1.5708, 0])
 
             await asyncio.sleep(5)
 
             #-----------------1. Strawberry-Vision 실행부------------------#
             print(f"[{i}] YOLO 탐지 및 3D 위치 추정 중...")
-            detect_and_save(model_path=yolo_path, npz_path=npz_path, save_path=json_path, time_interval=10000)
+            detect_and_save(model_path=yolo_path, npz_path=npz_path, save_path=json_path, time_interval=8)
             #test_mode2()
 
             #-----------------2. 좌표 변환------------------#
@@ -105,10 +104,10 @@ async def main_loop():
             with open(log_file_path, 'r') as f:
                 for line_num, line in enumerate(f, 1):
                     
-                    '''
+                    
                     if line_num > 3:
                         break # 3줄까지만 읽고 종료
-                    '''
+                    
 
                     try:
                         data = json.loads(line)
@@ -117,34 +116,35 @@ async def main_loop():
                             print(f"[INFO] Line {line_num}: Sending joint values {joint_values}")
                             
                             # ✅ 로봇팔 작동
-                            ##initialize_nodes(bus, [0, 1, 2, 3, 4, 5])
-                            #process_joint_set(bus,joint_values)
-                            await asyncio.sleep(5)
+                            process_joint_set(bus,joint_values)
+                            await asyncio.sleep(2)
                             
                             # ✅ 모터 작동
                             await send_done_device()
-                            await asyncio.sleep(10)
-                            #await run_motor(duration=10, power=0.75)
-
-                            # ✅ 로봇팔 초기화
-                            ##initialize_nodes(bus, [0, 1, 2, 3, 4, 5])
-                            #process_joint_set(bus, [-3.142, 0.873, -2.094, -1.222, -1.5708, 0])
-                            #await asyncio.sleep(5)
-                            ## await asyncio.sleep(10)  필요시 중간에 넣을 것 
+                            await asyncio.sleep(3) # 모터를 실행시키는 시간 + 여유시간
                             
+                            '''
+                            # ✅ 로봇팔 초기화
+                            process_joint_set(bus, [-3.142, 0.873, -2.094, -1.222, -1.5708, 0])
+                            await asyncio.sleep(3)
+                            '''
+
                         else:
                             print(f"[WARNING] Line {line_num}: Invalid or missing 'joint_values'")
                     except json.JSONDecodeError as e:
                         print(f"[ERROR] Line {line_num}: JSON decode error: {e}")
         
-            '''
-            # ✅ 로봇팔 초기화
-            #process_joint_angles([-3.142, 0.873, -2.094, -1.222, -1.5708, 0])
-            '''
             #-----------------5. 이동 부분----------------#
+            # ✅ 로봇팔 초기화
+            process_joint_set(bus, [-3.142, 0.873, -2.094, -1.222, -1.5708, 0])
+            await asyncio.sleep(2)
+            
+            # ✅ 이동 통신
+            await send_done_move()
+            await asyncio.sleep(6)
 
             i += 1
-            await asyncio.sleep(10)  # 주기적 실행
+            #await asyncio.sleep(10)  # 주기적 실행
 
     except KeyboardInterrupt:
         print("🔚 프로그램 종료됨.")

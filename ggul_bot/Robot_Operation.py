@@ -28,8 +28,8 @@ JOINT_SEQUENCE = [
 NODE_SPEED_PARAMS = {
     0: {'vel': 9.0, 'accel': 8.0, 'decel': 8.0},
     1: {'vel': 9.0, 'accel': 8.0, 'decel': 8.0},
-    2: {'vel': 8.5, 'accel': 7.0, 'decel': 7.0},
-    3: {'vel': 3.0, 'accel': 2.5, 'decel': 2.5},
+    2: {'vel': 6.0, 'accel': 4.5, 'decel': 4.0},
+    3: {'vel': 3.5, 'accel': 2.5, 'decel': 2.5},
     4: {'vel': 6.0, 'accel': 5.5, 'decel': 5.5},
     5: {'vel': 6.0, 'accel': 5.5, 'decel': 5.5},
 }

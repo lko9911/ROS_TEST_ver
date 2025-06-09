@@ -88,7 +88,7 @@ def transform_coordinates60(
 
 def transform_coordinates60(
     file_path="detected_objects.json",
-    tx=0.0, ty=0.0, tz=0.0
+    tx=0.0 , ty=-0.03, tz=0.06
 ):
     with open(file_path, "r") as f:
         data = json.load(f)
@@ -114,7 +114,7 @@ def transform_coordinates60(
         # 2. 45cm 일때 (134픽셀을 0.1m로 반환)
         x = (obj["X"] - 472) / 1340
         y = -(obj["Y"] - 406) / 1340
-        z = (obj["Z"]) / 100
+        z = 0.45
         
         P_cam = np.array([x, y, z])
         P_base = R @ P_cam + T

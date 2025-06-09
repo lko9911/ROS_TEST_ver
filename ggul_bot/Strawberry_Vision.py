@@ -110,7 +110,7 @@ def detect_and_save(model_path="model/best3.pt", npz_path="stereo_calibration_re
         colormap = cv2.applyColorMap(disparity_normalized, cv2.COLORMAP_JET)
 
         # YOLO 예측
-        yolo_results_left = yolo_model.predict(img_left_resized, conf=0.5)
+        yolo_results_left = yolo_model.predict(img_left_resized, conf=0.3)
         yolo_img_left = yolo_results_left[0].plot()  # 좌측 YOLO 검출 결과 이미지
 
         # YOLO 결과에서 신뢰도 및 경계 상자 추출
